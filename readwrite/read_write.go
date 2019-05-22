@@ -30,7 +30,7 @@ func (c *Conn) SendData(data []byte) {
 
 	reallsize := len(data)
 	c.writeBuf = make([]byte, 10+reallsize)
-	c.writeBuf[0] = Fincode & (byte)(TestMessage)
+	c.writeBuf[0] = Fincode | (byte)(TestMessage)
 	dataLength := 2
 
 	switch {
@@ -61,8 +61,8 @@ func (c *Conn) ReadData() ([]byte, error) {
 		log.Println("this is websocket don't support fragmented")
 		return nil, fmt.Errorf("this is websocket don't support fragmented")
 	}
-	filetype := buff[0]&TestMessage != 0
-	if !filetype {
+	filetype := int(buff[0] & 0xf)
+	if filetype == CloseMessage || filetype != TestMessage {
 		log.Println("the websocket only support text file")
 		return nil, fmt.Errorf("the websocket only support text file")
 	}
