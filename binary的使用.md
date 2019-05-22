@@ -12,6 +12,4 @@ err:=binary.Write(buf,binary.BigEndian,buff)
 2:直接写入的方式
 length:=20
 binary.BigEndian.PutUint16(buff[len(buff):],legnth)
-
-
 ```
